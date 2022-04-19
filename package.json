@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/styled": "^11.8.1",
     "@material-ui/styles": "^4.11.5",
     "@material/card": "^13.0.0",
     "@mui/core": "^5.0.0-alpha.54",
