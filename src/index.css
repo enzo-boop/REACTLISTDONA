@@ -28,7 +28,7 @@ body::-webkit-scrollbar{
 
 /* Handle */
 .todolist::-webkit-scrollbar-thumb {
-  ursor:grabbing;
+  cursor:grabbing;
   background: rgb(182, 181, 181);
   border-radius: 10px;
 }
@@ -39,12 +39,6 @@ body::-webkit-scrollbar{
   
   transition:all 0.3s ease-in-out !important;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 #outlined-basic-label,.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
   color:#fff!important;
 }
