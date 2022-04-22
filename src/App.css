@@ -1,19 +1,17 @@
-.App {
-  text-align: center;
+.css-46bh2p-MuiCardContent-root:last-child{
+  padding: 5px !important;
+  margin:0;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
+.MuiPaper-root .task{
+  background-color: #40404017;
+  display:flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+  justify-content: space-between;
+  }
 
-.App-link {
-  color: #61dafb;
-}
-
+  .css-10botns-MuiInputBase-input-MuiFilledInput-input{
+    color: #fff!important;;
+  }
+  .css-i4bv87-MuiSvgIcon-root {
+    fill:#fff!important;
+  }

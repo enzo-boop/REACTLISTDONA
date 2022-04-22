@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import TextField from '@mui/material/TextField';
 /*import {
     FormBuilder,
@@ -53,31 +54,41 @@ export default class Todolist extends React.Component{
 
     render(){
         return(
-            <div className='wrapper'>
-<Card  variant="outlined" sx={{ minWidth: 275 }} style={{height:'100vh',backgroundColor:'rgb(6 52 84)'}} >
+            <div className='wrapper' style={{height:'100vh',fontFamily:'system-ui'}}>
+<Card  variant="outlined" sx={{ minWidth: 275 }} style={{height:'100vh', background:"url('https://img.freepik.com/free-photo/female-hands-writing-plan-notepad-holding-coffee-tablet-money-wooden-background_1268-17465.jpg?w=2000')",backgroundSize:'cover'}} >
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="rgb(18 113 179)" gutterBottom>
-          Parola del giorno
-        </Typography>
-        <Typography variant="h5" component="div">
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="rgb(18 113 179)">
-          Sogno
-        </Typography>
-        <Typography variant="body2" color="rgb(18 113 179)">
-          Significato
-          <br />
-          {'" immaginazione, fantasia, cosa lontana dalla realtà,era solo un sogno; è stato un sogno; è tutto un sogno; la nostra speranza è un sogno;  una vita di sogni, di estasi, di fantasia (F. De Sanctis)"'}
-        </Typography>
-        <ul className='todolist'>
+        <div className="cardcontentwrapper" style={{backdropFilter:'brightness(0.5)',borderRadius:'3px',boxShadow:'rgb(30 30 30) 0px 1px 10px'}}>
+        <div class="wrappercontainer" style={{display:'flex',flexDirection:'row',height:'70vh',marginTop:'20px',borderRadius:'0.25rem'}}>
+          <div class='filters' style={{width:'35%',color:'#fff',marginLeft:'5px'}}>
+            <h2 style={{fontSize:'24px !important',fontVariant:'all-small-caps',borderBottom:'solid 1px #fff'}}>
+            filtri
+            </h2>
+          </div>
+        <ul className='todolist' style={{width:'65%',marginRight:'20px',display:'flex',flexDirection:'row',flexWrap:'wrap',overflowY:'scroll'}}>
          {this.state.tasks.map(elem=>{return (
-         <Card  key={elem.id} variant="outlined" style={{backgroundColor:"#fff"}}>
-      <CardContent>
-          <div className="taskcontent" style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-          <Checkbox onChange={(e)=>{console.log(elem);elem.checked=!elem.checked}} value={elem.checked}></Checkbox>
-            <Typography variant="h5" color='rgb(6 52 84)'>{elem.text}</Typography>
+         <Card  id={elem.id} className='task' variant="elevation" style={{padding:'0',minWidth:'240px',minHeight:'140px',maxHeight:'240px',transition:'all ease-in-out 0.3s',margin:'30px'}}>
+      <CardContent style={{display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
+         <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+            <Checkbox onChange={()=>{
+            elem.checked=!elem.checked;
+            console.log('task checked: ',elem);
+            elem.checked?document.getElementById(elem.id).style.backgroundColor='green':document.getElementById(elem.id).style.backgroundColor='#40404017';
+            }} value={elem.checked}></Checkbox>
+            <TextareaAutosize
+           onChange={(e)=>{ 
+            elem.text = e.nativeEvent.srcElement.value;
+            localStorage.setItem('list',JSON.stringify(this.state.tasks));
+          }
+          }
+      aria-label="empty textarea"
+      placeholder="Scrivi .."
+      style={{ width: 200 ,fontSize:'16px'}}
+    >
+      {elem.text}
+    </TextareaAutosize>
+    </div>
             <ThemeProvider theme={redTheme}>
-            <Button variant='contained' onClick={(e)=>{
+            <Button variant='outlined' onClick={(e)=>{
               localStorage.clear();
               console.log(elem);
               this.setState({tasks:this.state.tasks.filter(
@@ -85,20 +96,21 @@ export default class Todolist extends React.Component{
             });
               }}><Trash></Trash></Button>
             </ThemeProvider>
-        </div>
       </CardContent>
     </Card>
          );
         }
  )}
-      </ul>
-      </CardContent>
+      </ul> 
+      </div>
       <CardActions>
-      <div className="listcontrols" style={{position:'absolute',bottom:'10px',right:'0'}}>
-      <TextField style={{color:'rgb(18 113 179)'}}id="outlined-basic" label="Nuova nota" variant="outlined" onChange={(e)=>{this.changeInput(e)}}/>
-      <Button style={{height:'56px'}} variant="outlined" disabled={this.state.valid} onClick={()=>this.newTask()}><AddIcon></AddIcon></Button>
+      <div className="listcontrols">
+      <TextField id="outlined-basic" label="Nuova nota" variant='filled'  onChange={(e)=>{this.changeInput(e)}}/>
+      <Button style={{height:'56px'}} variant='contained' disabled={this.state.valid} onClick={()=>this.newTask()}><AddIcon></AddIcon></Button>
       </div>
       </CardActions>
+     </div>
+      </CardContent>
     </Card>
             </div>
         );
