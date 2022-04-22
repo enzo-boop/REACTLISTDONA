@@ -69,6 +69,7 @@ export default class Todolist extends React.Component{
       <CardContent style={{display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
          <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
             <Checkbox 
+            className='checkbox'
             defaultChecked={elem.checked}
             onChange={()=>{
             elem.checked=!elem.checked;
