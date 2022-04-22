@@ -42,6 +42,6 @@ body::-webkit-scrollbar{
 #outlined-basic-label,.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
   color:#fff!important;
 }
-.checkbox:checked .task{
+.Mui-checked .task{
   background-color: green!important;
 }
