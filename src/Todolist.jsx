@@ -68,7 +68,9 @@ export default class Todolist extends React.Component{
          <Card  id={elem.id} className='task' variant="elevation" style={{padding:'0',minWidth:'240px',minHeight:'140px',maxHeight:'240px',transition:'all ease-in-out 0.3s',margin:'30px'}}>
       <CardContent style={{display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
          <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-            <Checkbox onChange={()=>{
+            <Checkbox 
+            defaultChecked={elem.checked}
+            onChange={()=>{
             elem.checked=!elem.checked;
             console.log('task checked: ',elem);
             elem.checked?document.getElementById(elem.id).style.backgroundColor='green':document.getElementById(elem.id).style.backgroundColor='#40404017';
