@@ -20,6 +20,8 @@ body::-webkit-scrollbar{
   width: 20px;
 }
 
+
+
 /* Track */
 .todolist::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey;
@@ -29,19 +31,31 @@ body::-webkit-scrollbar{
 /* Handle */
 .todolist::-webkit-scrollbar-thumb {
   cursor:grabbing;
-  background: rgb(182, 181, 181);
+  background: cadetblue;
   border-radius: 10px;
 }
 .todolist::-webkit-scrollbar-thumb:hover {
-  background: rgb(104, 104, 104);
+  background: cadetblue;
 }
 *{
   
   transition:all 0.3s ease-in-out !important;
+}
+.cardcontentwrapper{
+  margin: 10px;
+  background:cadetblue;
+  margin: 15px !important;
 }
 #outlined-basic-label,.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
   color:#fff!important;
 }
 .css-zun73v.Mui-checked .task{
   background-color: green!important;
+}
+.css-bbgsq2-MuiPaper-root-MuiCard-root {
+  background: cadetblue!important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

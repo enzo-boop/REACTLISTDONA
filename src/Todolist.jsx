@@ -54,18 +54,18 @@ export default class Todolist extends React.Component{
     render(){
         return(
             <div className='wrapper' style={{height:'100vh',fontFamily:'system-ui'}}>
-<Card  variant="outlined" sx={{ minWidth: 275 }} style={{height:'100vh', background:"url('https://img.freepik.com/free-photo/female-hands-writing-plan-notepad-holding-coffee-tablet-money-wooden-background_1268-17465.jpg?w=2000')",backgroundSize:'cover'}} >
-      <CardContent>
+<Card  variant="outlined" sx={{ minWidth: 275 }} style={{height:'100vh'}} >
+      <CardContent style={{background:'#fff'}}>
         <div className="cardcontentwrapper" style={{backdropFilter:'brightness(0.5)',borderRadius:'3px',boxShadow:'rgb(30 30 30) 0px 1px 10px'}}>
         <div class="wrappercontainer" style={{display:'flex',flexDirection:'row',height:'70vh',marginTop:'20px',borderRadius:'0.25rem'}}>
           <div class='filters' style={{width:'35%',color:'#fff',marginLeft:'5px'}}>
-            <h2 style={{fontSize:'24px !important',fontVariant:'all-small-caps',borderBottom:'solid 1px #fff'}}>
+            <h2 style={{fontSize:'24px !important',fontVariant:'all-small-caps',borderBottom:'solid 1px #1976d2'}}>
             filtri
             </h2>
           </div>
         <ul className='todolist' style={{width:'65%',marginRight:'20px',display:'flex',flexDirection:'row',flexWrap:'wrap',overflowY:'scroll'}}>
          {this.state.tasks.map(elem=>{return (
-         <Card  id={elem.id} className='task' variant="elevation" style={{padding:'0',minWidth:'240px',minHeight:'140px',maxHeight:'240px',transition:'all ease-in-out 0.3s',margin:'30px'}}>
+         <Card  id={elem.id} className='task' variant="elevation">
       <CardContent style={{display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
          <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
             <Checkbox 
