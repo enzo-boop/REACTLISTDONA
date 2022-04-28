@@ -22,14 +22,18 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 const redTheme = createTheme({ palette: { primary: red } })
 //const blueTheme = createTheme({ palette: { primary: green } })
 
+const apiUrlDailyText =   "https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json";
+
+let quotes = new Array([]);
+let rndQuote = new Object();
+
 export default class Todolist extends React.Component{
     constructor(props){
         super(props);
         this.newTask = this.newTask.bind(this);
         this.changeInput = this.changeInput.bind(this);
-        this.state = {tasks: [],valid:true};
+        this.state = {tasks: [],valid:true,randomQuote:null};
     }
-    
 
     changeInput(e){
         if(e.target.value!=='')
@@ -51,11 +55,21 @@ export default class Todolist extends React.Component{
     localStorage.setItem('list',JSON.stringify(this.state.tasks));
     }
 
+
+
     render(){
         return(
             <div className='wrapper' style={{height:'100vh',fontFamily:'system-ui'}}>
-<Card  variant="outlined" sx={{ minWidth: 275 }} style={{height:'100vh'}} >
-      <CardContent style={{background:'#fff'}}>
+<Card  variant="outlined" sx={{ minWidth: 275 }} style={{color:'#fff',height:'100vh',display:'flex',flexDirection:'column',justifyContent:'stretch',alignItems:'stretch',fontSize:'18px !important'}} >
+<div className="content" style={{textAlign:'center',padding:'20px 0',}}>
+            <div className="header">
+              {this.state.randomQuote !== null && this.state.randomQuote.quote}
+            </div>
+            <div className="description" style={{borderBottom:'solid 1px #1976d2'}}>
+              {this.state.randomQuote !== null && this.state.randomQuote.author}
+            </div>
+            </div>
+      <CardContent style={{background:'#fff'}}>     
         <div className="cardcontentwrapper" style={{backdropFilter:'brightness(0.5)',borderRadius:'3px',boxShadow:'rgb(30 30 30) 0px 1px 10px'}}>
         <div class="wrappercontainer" style={{display:'flex',flexDirection:'row',height:'70vh',marginTop:'20px',borderRadius:'0.25rem'}}>
           <div class='filters' style={{width:'35%',color:'#fff',marginLeft:'5px'}}>
@@ -63,7 +77,7 @@ export default class Todolist extends React.Component{
             filtri
             </h2>
           </div>
-        <ul className='todolist' style={{width:'65%',marginRight:'20px',display:'flex',flexDirection:'row',flexWrap:'wrap',overflowY:'scroll'}}>
+        <ul className='todolist' style={{width:'65%',marginRight:'20px',display:'flex',flexDirection:'row',flexWrap:'wrap',overflowY:'scroll',alignItems:'flex-start'}}>
          {this.state.tasks.map(elem=>{return (
          <Card  id={elem.id} className='task' variant="elevation">
       <CardContent style={{display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
@@ -82,17 +96,18 @@ export default class Todolist extends React.Component{
             localStorage.setItem('list',JSON.stringify(this.state.tasks));
           }
           }
+      defaultValue={elem.text}
+      className='text'
       aria-label="empty textarea"
       placeholder="Scrivi .."
       style={{ width: 200 ,fontSize:'16px'}}
+      minRows={3}
+      maxRows={3}
     >
-      {elem.text}
     </TextareaAutosize>
     </div>
             <ThemeProvider theme={redTheme}>
-            <Button variant='outlined' onClick={(e)=>{
-              localStorage.clear();
-              console.log(elem);
+            <Button className='delete' variant='text' style={{marginTop:'10px'}}onClick={(e)=>{
               this.setState({tasks:this.state.tasks.filter(
                 element=>{return element.id!==elem.id})
             });
@@ -117,7 +132,17 @@ export default class Todolist extends React.Component{
             </div>
         );
     }
-    componentDidMount(props){
+    async componentDidMount(props){
+      await fetch(apiUrlDailyText)
+      .then(res => res.json())
+      .then(data => {
+          quotes=data.quotes;
+          let randNumb = Math.floor(Math.random() * quotes.length);
+          rndQuote = quotes[randNumb];
+      this.setState({randomQuote:rndQuote});
+      console.log(this.state.randomQuote)
+      });
+      console.log(this.state.randomQuote)
         if(localStorage.getItem('list')){
             this.setState({tasks:JSON.parse(localStorage.getItem('list'))});
         }

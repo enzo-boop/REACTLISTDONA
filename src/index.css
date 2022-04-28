@@ -20,21 +20,27 @@ body::-webkit-scrollbar{
   width: 20px;
 }
 
-
+.textare{
+  resize:none;
+}
+.delete:hover {
+background:rgb(218, 44, 44)!important;
+color:#fff;
+}
 
 /* Track */
-.todolist::-webkit-scrollbar-track {
+.todolist::-webkit-scrollbar-track,.textarea::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }
 
 /* Handle */
-.todolist::-webkit-scrollbar-thumb {
+.todolist::-webkit-scrollbar-thumb ,.textarea::-webkit-scrollbar-track{
   cursor:grabbing;
   background: cadetblue;
   border-radius: 10px;
 }
-.todolist::-webkit-scrollbar-thumb:hover {
+.todolist::-webkit-scrollbar-thumb:hover ,.textarea::-webkit-scrollbar-track{
   background: cadetblue;
 }
 *{
@@ -42,7 +48,6 @@ body::-webkit-scrollbar{
   transition:all 0.3s ease-in-out !important;
 }
 .cardcontentwrapper{
-  margin: 10px;
   background:cadetblue;
   margin: 15px !important;
 }
