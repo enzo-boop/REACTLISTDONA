@@ -1,6 +1,11 @@
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 /*import {
     FormBuilder,
@@ -18,6 +23,7 @@ import CardContent from '@mui/material/CardContent';
 
 import { red /*green*/ } from '@mui/material/colors'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { elementAcceptingRef } from '@mui/utils';
 
 const redTheme = createTheme({ palette: { primary: red } })
 //const blueTheme = createTheme({ palette: { primary: green } })
@@ -32,8 +38,16 @@ export default class Todolist extends React.Component{
         super(props);
         this.newTask = this.newTask.bind(this);
         this.changeInput = this.changeInput.bind(this);
-        this.state = {tasks: [],valid:true,randomQuote:null};
+        this.handleChange = this.handleChange.bind(this);
+        this.state = {filteredTask:[],tasks: [],valid:true,randomQuote:null,selection:0};
     }
+
+updateTasks(elem){
+  this.setState({tasks:this.state.tasks.map(element=>{console.log(elem,element);element.id===elem.id?element = elem:element=element;return element})});
+  localStorage.setItem('list',JSON.stringify(this.state.tasks));
+  this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))});
+  this.filterTask(this.state.selection);
+}
 
     changeInput(e){
         if(e.target.value!=='')
@@ -42,17 +56,40 @@ export default class Todolist extends React.Component{
         this.setState({valid:true});
     }
 
-    newTask(){
+    handleChange = (event) => {
+this.setState({selection:event.target.value})
+this.filterTask(event.target.value);
+    }
+
+    filterTask(value){
+      if(value===0){
+        this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))})
+      }
+      if(value===10)
+      {
+        this.setState({filteredTask:this.state.tasks.filter(task=>{return task.checked})})
+      }
+      if(value===20){
+        this.setState({filteredTask:this.state.tasks.filter(task=>{return !task.checked})})
+      }
+      console.log('filtered tasks: ',this.state.filteredTask)
+    }
+    newTask(e){
     let tempTasks = this.state.tasks;
     let input = document.getElementById('outlined-basic').value;
+    document.getElementById('outlined-basic').value=null;
     let task={
         id:Math.random(),
         text:input,
         checked:false,
     }
+    for(let prop in task){
+    console.log(prop)
+  }
     tempTasks.push(task);
     this.setState({tasks : tempTasks});
     localStorage.setItem('list',JSON.stringify(this.state.tasks));
+    this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))})
     }
 
 
@@ -76,54 +113,78 @@ export default class Todolist extends React.Component{
             <h2 style={{fontSize:'24px !important',fontVariant:'all-small-caps',borderBottom:'solid 1px #1976d2'}}>
             filtri
             </h2>
+            <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Filtri</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selection}
+          label="Filtri"
+          onChange={this.handleChange}
+        >
+          <MenuItem value={0}>Nessuna</MenuItem>
+          <MenuItem value={10}>Completate</MenuItem>
+          <MenuItem value={20}>Da Fare</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
           </div>
         <ul className='todolist' style={{width:'65%',marginRight:'20px',display:'flex',flexDirection:'row',flexWrap:'wrap',overflowY:'scroll',alignItems:'flex-start'}}>
-         {this.state.tasks.map(elem=>{return (
-         <Card  id={elem.id} className='task' variant="elevation">
-      <CardContent style={{display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
-         <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-            <Checkbox 
-            className='checkbox'
-            defaultChecked={elem.checked}
-            onChange={()=>{
-            elem.checked=!elem.checked;
-            console.log('task checked: ',elem);
-            elem.checked?document.getElementById(elem.id).style.backgroundColor='green':document.getElementById(elem.id).style.backgroundColor='#40404017';
-            }} value={elem.checked}></Checkbox>
-            <TextareaAutosize
-           onChange={(e)=>{ 
-            elem.text = e.nativeEvent.srcElement.value;
-            localStorage.setItem('list',JSON.stringify(this.state.tasks));
-          }
-          }
-      defaultValue={elem.text}
-      className='text'
-      aria-label="empty textarea"
-      placeholder="Scrivi .."
-      style={{ width: 200 ,fontSize:'16px'}}
-      minRows={3}
-      maxRows={3}
-    >
-    </TextareaAutosize>
-    </div>
-            <ThemeProvider theme={redTheme}>
-            <Button className='delete' variant='text' style={{marginTop:'10px'}}onClick={(e)=>{
-              this.setState({tasks:this.state.tasks.filter(
-                element=>{return element.id!==elem.id})
-            });
-              }}><Trash></Trash></Button>
-            </ThemeProvider>
-      </CardContent>
-    </Card>
-         );
-        }
- )}
+         {this.state.filteredTask.map(elem=>{return (
+        <Card  id={elem.id} className='task' variant="elevation">
+     <CardContent  style={{background:elem.checked?'green':'rgb(26 121 143)',display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+           <Checkbox 
+           className='checkbox'
+           checked={elem.checked}
+           onChange={()=>{
+           elem.checked=!elem.checked;
+           this.updateTasks(elem);
+           console.log('task checked: ',elem);
+           elem.checked?document.getElementById(elem.id).style.backgroundColor='green':document.getElementById(elem.id).style.backgroundColor='#40404017';
+           }}></Checkbox>
+           <TextareaAutosize
+          onChange={(e)=>{ 
+           elem.text = e.nativeEvent.srcElement.value;
+           localStorage.setItem('list',JSON.stringify(this.state.tasks));
+           this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))});
+         }
+         }
+     defaultValue={elem.text}
+     className='text'
+     aria-label="empty textarea"
+     placeholder="Scrivi .."
+     style={{ width: 200 ,fontSize:'16px'}}
+     minRows={3}
+     maxRows={3}
+   >
+   </TextareaAutosize>
+   </div>
+           <ThemeProvider theme={redTheme}>
+           <Button className='delete' variant='text' style={{marginTop:'10px'}}onClick={(e)=>{
+             let temp = this.state.tasks.filter(element=>{return element.id!==elem.id});
+           localStorage.setItem('list',JSON.stringify(temp));
+           this.setState({tasks:JSON.parse(localStorage.getItem('list'))});
+           this.filterTask(this.state.selection);
+           
+           console.log(this.state.tasks,temp)
+             }}><Trash></Trash></Button>
+           </ThemeProvider>
+     </CardContent>
+   </Card>
+        );
+       })
+      }
       </ul> 
       </div>
       <CardActions>
       <div className="listcontrols">
-      <TextField id="outlined-basic" label="Nuova nota" variant='filled'  onChange={(e)=>{this.changeInput(e)}}/>
-      <Button style={{height:'56px'}} variant='contained' disabled={this.state.valid} onClick={()=>this.newTask()}><AddIcon></AddIcon></Button>
+      <TextField id="outlined-basic" label="Nuova nota" variant='filled' onKeyDown={(e)=>{
+        if(e.key==='Enter')
+          document.getElementById('submitbtn').click();
+          }}  onChange={(e)=>{this.changeInput(e)}}/>
+      <Button style={{height:'56px'}} id ='submitbtn' variant='contained' disabled={this.state.valid}  onClick={(e)=>this.newTask(e)}><AddIcon></AddIcon></Button>
       </div>
       </CardActions>
      </div>
@@ -140,11 +201,11 @@ export default class Todolist extends React.Component{
           let randNumb = Math.floor(Math.random() * quotes.length);
           rndQuote = quotes[randNumb];
       this.setState({randomQuote:rndQuote});
-      console.log(this.state.randomQuote)
       });
-      console.log(this.state.randomQuote)
         if(localStorage.getItem('list')){
             this.setState({tasks:JSON.parse(localStorage.getItem('list'))});
+            this.filterTask(this.state.selection);
+            console.log('tasks: ',this.state.tasks);
         }
     }
 }
