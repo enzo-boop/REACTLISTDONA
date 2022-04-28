@@ -23,7 +23,6 @@ import CardContent from '@mui/material/CardContent';
 
 import { red /*green*/ } from '@mui/material/colors'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { elementAcceptingRef } from '@mui/utils';
 
 const redTheme = createTheme({ palette: { primary: red } })
 //const blueTheme = createTheme({ palette: { primary: green } })
@@ -43,7 +42,7 @@ export default class Todolist extends React.Component{
     }
 
 updateTasks(elem){
-  this.setState({tasks:this.state.tasks.map(element=>{console.log(elem,element);element.id===elem.id?element = elem:element=element;return element})});
+  this.setState({tasks:this.state.tasks.map(element=>{console.log(elem,element);element.id===elem.id?element = elem:console.log();return element})});
   localStorage.setItem('list',JSON.stringify(this.state.tasks));
   this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))});
   this.filterTask(this.state.selection);
