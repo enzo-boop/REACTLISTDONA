@@ -60,7 +60,7 @@ export default class Todolist extends React.Component{
     render(){
         return(
             <div className='wrapper' style={{height:'100vh',fontFamily:'system-ui'}}>
-<Card  variant="outlined" sx={{ minWidth: 275 }} style={{color:'#fff',height:'100vh',display:'flex',flexDirection:'column',justifyContent:'stretch',alignItems:'stretch',fontSize:'18px !important'}} >
+<Card  variant="outlined" sx={{ minWidth: 275 }} style={{color:'#fff',background:'rgb(95 158 160)',height:'100vh',display:'flex',flexDirection:'column',justifyContent:'stretch',alignItems:'stretch',fontSize:'18px !important'}} >
 <div className="content" style={{textAlign:'center',padding:'20px 0',}}>
             <div className="header">
               {this.state.randomQuote !== null && this.state.randomQuote.quote}
