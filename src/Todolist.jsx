@@ -42,9 +42,16 @@ export default class Todolist extends React.Component{
     }
 
 updateTasks(elem){
-  this.setState({tasks:this.state.tasks.map(element=>{console.log(elem,element);element.id===elem.id?element = elem:console.log();return element})});
+  let tempArray = this.state.tasks.map(element=>{
+    if(elem.id===element.id)
+    {
+      element=elem
+    }
+    return element
+  });
+  this.setState({tasks:tempArray});
   localStorage.setItem('list',JSON.stringify(this.state.tasks));
-  this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))});
+  this.setState({filteredTask:tempArray});
   this.filterTask(this.state.selection);
 }
 
@@ -56,22 +63,24 @@ updateTasks(elem){
     }
 
     handleChange = (event) => {
-this.setState({selection:event.target.value})
+this.setState({selection:event.target.value});
 this.filterTask(event.target.value);
     }
 
     filterTask(value){
+      let tempArray;
       if(value===0){
-        this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))})
+        tempArray=this.state.tasks;
       }
       if(value===10)
       {
-        this.setState({filteredTask:this.state.tasks.filter(task=>{return task.checked})})
+        tempArray=this.state.tasks.filter(task=>{return task.checked===true});
       }
       if(value===20){
-        this.setState({filteredTask:this.state.tasks.filter(task=>{return !task.checked})})
+        tempArray=this.state.tasks.filter(task=>{return task.checked===false});
       }
-      console.log('filtered tasks: ',this.state.filteredTask)
+      this.setState({filteredTask:tempArray})
+      console.log('filtered tasks: ',this.state.filteredTask,tempArray);
     }
     newTask(e){
     let tempTasks = this.state.tasks;
@@ -82,16 +91,21 @@ this.filterTask(event.target.value);
         text:input,
         checked:false,
     }
-    for(let prop in task){
-    console.log(prop)
-  }
     tempTasks.push(task);
     this.setState({tasks : tempTasks});
     localStorage.setItem('list',JSON.stringify(this.state.tasks));
-    this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))})
+    this.setState({filteredTask:this.state.tasks});
     }
 
+deleteTask(task){
+  console.log(task)
+  let tempArray = this.state.tasks.filter(elem=>{return elem.id !== task.id});
+this.setState({tasks:tempArray});
+localStorage.setItem('list',JSON.stringify(this.state.tasks));
+this.setState({filteredTask:this.state.tasks});
+this.filterTask(this.state.selection);
 
+}
 
     render(){
         return(
@@ -114,7 +128,7 @@ this.filterTask(event.target.value);
             </h2>
             <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Filtri</InputLabel>
+        <InputLabel style={{color:'#fff'}} id="demo-simple-select-label">Filtri</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
@@ -137,17 +151,17 @@ this.filterTask(event.target.value);
            <Checkbox 
            className='checkbox'
            checked={elem.checked}
-           onChange={()=>{
+           onChange={(e)=>{
+             
            elem.checked=!elem.checked;
            this.updateTasks(elem);
            console.log('task checked: ',elem);
-           elem.checked?document.getElementById(elem.id).style.backgroundColor='green':document.getElementById(elem.id).style.backgroundColor='#40404017';
+           e.target.nativeEvent.srcElement.checked===true?e.target.nativeEvent.srcElement.style.backgroundColor='green':e.target.nativeEvent.srcElement.style.backgroundColor='#40404017';
            }}></Checkbox>
            <TextareaAutosize
           onChange={(e)=>{ 
            elem.text = e.nativeEvent.srcElement.value;
-           localStorage.setItem('list',JSON.stringify(this.state.tasks));
-           this.setState({filteredTask:JSON.parse(localStorage.getItem('list'))});
+           localStorage.setItem('list',JSON.stringify(this.state.filteredTask));
          }
          }
      defaultValue={elem.text}
@@ -162,12 +176,8 @@ this.filterTask(event.target.value);
    </div>
            <ThemeProvider theme={redTheme}>
            <Button className='delete' variant='text' style={{marginTop:'10px'}}onClick={(e)=>{
-             let temp = this.state.tasks.filter(element=>{return element.id!==elem.id});
-           localStorage.setItem('list',JSON.stringify(temp));
-           this.setState({tasks:JSON.parse(localStorage.getItem('list'))});
-           this.filterTask(this.state.selection);
-           
-           console.log(this.state.tasks,temp)
+             console.log(e.target.parentElement)
+      this.deleteTask(elem);
              }}><Trash></Trash></Button>
            </ThemeProvider>
      </CardContent>
